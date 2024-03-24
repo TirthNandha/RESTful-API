@@ -22,12 +22,14 @@ app.get("/", function(req, res) {
     res.send("Hello World!!")
 })
 
-app.get("/articles", async function(req, res) {
+app.route("/articles")
+
+.get(async function(req, res) {
         const articles = await Article.find({});
         res.send(articles);
-});
+})
 
-app.post("/articles", function(req,res) {
+.post(function(req,res) {
    
     const newArticle = new Article({
         title : req.body.title,
@@ -42,7 +44,7 @@ app.post("/articles", function(req,res) {
     })
 })
 
-app.delete("/articles", async function(req, res) {
+.delete(async function(req, res) {
     await Article.deleteMany({})
     res.send("Successfully deleted all items")
 })

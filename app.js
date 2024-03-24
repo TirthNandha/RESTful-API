@@ -42,6 +42,11 @@ app.post("/articles", function(req,res) {
     })
 })
 
+app.delete("/articles", async function(req, res) {
+    await Article.deleteMany({})
+    res.send("Successfully deleted all items")
+})
+
 app.listen(3000, function(req, res) {
     console.log("Server is running on port 3000")
 })

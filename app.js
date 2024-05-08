@@ -24,30 +24,49 @@ app.get("/", function(req, res) {
 
 app.route("/articles")
 
+/////////////////Requests targeting all articles////////////////
+
 .get(async function(req, res) {
         const articles = await Article.find({});
         res.send(articles);
 })
 
 .post(function(req,res) {
-   
+
     const newArticle = new Article({
         title : req.body.title,
         content : req.body.content
     })
-    newArticle.save(function(err) {
-        if(!err) {
-            res.send("Successfully added a new article")
-        } else {
-            res.send(err)
-        }
-    })
+    newArticle.save()
+    res.send("document saved successfully")
 })
 
 .delete(async function(req, res) {
     await Article.deleteMany({})
     res.send("Successfully deleted all items")
+});
+
+/////////////////Requests targeting a specific articles////////////////
+
+app.route("/articles/:articleTitle")
+
+.get(async function(req, res) {
+    const foundArticle = await Article.findOne({title: req.params.articleTitle})
+    if(foundArticle) {
+        res.send(foundArticle)
+    } else {
+        res.send("No articles matching that title was found.")
+    }
 })
+
+.put(function(req, res) {
+    Article.updateOne(
+        { title: req.params.articleTitle },
+        { $set: { title: req.body.title, content: req.body.content } }
+    );
+    
+
+});
 
 app.listen(3000, function(req, res) {
     console.log("Server is running on port 3000")
